@@ -167,4 +167,45 @@ describe('Movies endpoint',  () => {
           });
         });
       });
+
+      //Delete Review tests
+      describe("DELETE /api/movies/:movie_id/reviews/:review_id", () => {
+        let reviewId; // NEW LINE
+      
+        before(() => {
+          // Fetch a review ID to use in the tests
+          return request(api)
+            .get(`/api/movies/${movie.id}/reviews`)
+            .set("Accept", "application/json")
+            .then((res) => {
+              reviewId = res.body.results[0].id;
+            });
+        });
+      
+        describe("when both movie_id and review_id are valid", () => {
+            it("should return a 404 status", () => {
+              return request(api)
+                .delete(`/api/movies/${movie.id}/reviews/${reviewId}`)
+                .expect(404);
+            });
+          });
+      
+          describe("when movie_id is valid but review_id is invalid", () => {
+            it("should return a 404 status with the expected message", () => {
+              return request(api)
+                .delete(`/api/movies/${movie.id}/reviews/9999`)
+                .expect(404)
+                .expect({});
+            });
+          });
+      
+          describe("when movie_id is invalid", () => {
+            it("should return a 404 status with the expected message", () => {
+              return request(api)
+                .delete(`/api/movies/9999/reviews/${reviewId}`)
+                .expect(404)
+                .expect({});
+            });
+          });
+      });
 });
