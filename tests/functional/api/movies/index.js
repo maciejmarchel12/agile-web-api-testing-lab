@@ -1,6 +1,13 @@
 import chai from "chai";
 import request from "supertest";
 import api from "../../../../index";  // Express API application 
+import { movieReviews } from '../../../../api/movies/moviesData'
+
+// set up seed data for datastore
+let seedData = {
+    movieReviews : []
+  } 
+  movieReviews.results.forEach(review => seedData.movieReviews.push(review) )
 
 const expect = chai.expect;
 
@@ -11,20 +18,14 @@ describe('Movies endpoint',  () => {
 
     // FIRST TEST
     describe("Movies endpoint", () => {
-        describe("GET /api/movies ", () => {
-          it("returns all the movies and a status 200", (done) => {
-            request(api)
-              .get("/api/movies")
-              .set("Accept", "application/json")
-              .expect("Content-Type", /json/)
-              .expect(200)
-              .end((err, res) => {
-                expect(res.body.results).to.be.a("array");
-                expect(res.body.results.length).to.equal(4);
-                done();
-              });
-          });
-        });
+        beforeEach(() => {
+          // Clean out datastore
+          while (movieReviews.results.length > 0) {
+             movieReviews.results.pop()
+          }
+          // Repopulate datastore
+          seedData.movieReviews.forEach(review => movieReviews.results.push(review)  )
+        })
     });
 
       //2ND TEST
