@@ -24,10 +24,10 @@ describe('Movies endpoint',  () => {
               });
           });
         });
-      });
+    });
 
       //2ND TEST
-      describe("GET /api/movies/:id", () => {
+    describe("GET /api/movies/:id", () => {
         before(() => {
           movie = {
             id: 527774,
@@ -43,9 +43,9 @@ describe('Movies endpoint',  () => {
               .expect(200)
               .then((res) => {
                 expect(res.body).to.have.property("title", movie.title);
-              });
-          });
+            });
         });
+    });
 
         //3RD TEST
         describe("when the id is invalid", () => {
@@ -60,5 +60,49 @@ describe('Movies endpoint',  () => {
               });
           });
         });
-      });
+    });
+
+    //4TH TEST REVIEW
+    describe("GET /api/movies/:id/reviews", () => {
+
+        before(() => {
+            movie = {
+                id: 527774,
+                title: "Raya and the Last Dragon",
+            };
+        });
+
+        // Nested describe block for when the id is valid
+        describe("when the id is valid", () => {
+            
+            // Test for successful retrieval of reviews
+            it("returns reviews for the specified movie", (done) => {
+                request(api)
+                    .get(`/api/movies/${movie.id}/reviews`)
+                    .set("Accept", "application/json")
+                    .expect("Content-Type", /json/)
+                    .expect(200)
+                    .end((err, res) => {
+                        expect(res.body.results).to.be.a("array");
+                        done();
+                    });
+                });
+            });
+    });
+
+    describe("when the id is invalid", () => {
+            
+        // Test for handling an invalid id
+        it("returns the NOT found error message", (done) => {
+            request(api)
+                .get("/api/movies/9999/reviews")
+                .set("Accept", "application/json")
+                .expect("Content-Type", /json/)
+                .expect({
+                    message: "The resource you requested could not be found.",
+                    status_code: 404,
+                })
+            .end(done);
+        });
+    });
 });
