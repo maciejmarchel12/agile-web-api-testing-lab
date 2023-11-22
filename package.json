@@ -5,16 +5,23 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon --exec babel-node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha "
   },
   "author": "Diarmuid O Connor",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.23.3",
+    "@babel/plugin-transform-runtime": "^7.23.4",
+    "@babel/preset-env": "^7.23.3",
+    "@babel/register": "^7.22.15",
     "babel-cli": "^6.26.0",
     "babel-eslint": "^10.1.0",
     "babel-preset-env": "^1.7.0",
+    "chai": "^4.3.10",
     "eslint": "^8.2.0",
-    "nodemon": "^2.0.15"
+    "mocha": "^10.2.0",
+    "nodemon": "^2.0.15",
+    "supertest": "^6.3.3"
   },
   "dependencies": {
     "dotenv": "^10.0.0",
